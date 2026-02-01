@@ -1,5 +1,7 @@
+'use client'
+
 import { useCallback, useEffect, useState } from "react";
-import DiaryEntriesContext from "./diaryEntriesContext";
+import DiaryEntriesContext from "./DiaryEntriesContext";
 
 export const DiartEntriesContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [diaryEntries, setDiaryEntries] = useState<Array<{ date: string; text: string; meta: string }>>([]) 
