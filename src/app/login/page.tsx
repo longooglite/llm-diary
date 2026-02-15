@@ -1,6 +1,8 @@
+'use client'
+
 import { useAuth } from 'react-oidc-context'
 
-export const LoginPage = () => {
+const LoginPage = () => {
   const auth = useAuth()
 
   const signOutRedirect = () => {
