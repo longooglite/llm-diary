@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import DiaryEntriesContext from './DiaryEntriesContext'
 
-export const DiartEntriesContextProvider = ({
+export const DiaryEntriesContextProvider = ({
   children,
 }: {
   children: React.ReactNode

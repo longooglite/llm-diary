@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { AuthProvider } from 'react-oidc-context'
 import CognitoContext from './CognitoContext'
@@ -17,7 +18,7 @@ export const CognitoContextProvider = ({
 }) => {
   return (
     <CognitoContext.Provider value={{}}>
-        <AuthProvider {...cognitoAuthConfig}>{children}</AuthProvider>
+      <AuthProvider {...cognitoAuthConfig}>{children}</AuthProvider>
     </CognitoContext.Provider>
   )
 }
