@@ -1,10 +1,5 @@
-export interface DiaryEvent {
-    id: string;
-    raw_text: string;
-    source: string;
-    created_at: string;
-    meta?: any;
-}
+import { DiaryEvent } from "@/types";
+import { storeEvent } from "./storeEvent";
 
 const events: DiaryEvent[] = [];
 
@@ -17,19 +12,33 @@ export const recordEvent = async (text: string, meta?: any): Promise<DiaryEvent>
         meta,
     };
 
-    // Simulate persistent storage (DynamoDB/S3)
-    events.push(event);
-    console.log('[EventLedger] Recorded new fact:', event);
+    const result = await storeEvent(event);
+    console.log('[EventLedger] Recorded new fact:', result);
+
+    try {
+        await storeEvent(event);
+        console.log('[EventLedger] Fact persisted to AppSync.');
+    } catch (err) {
+        console.warn('[EventLedger] Failed to persist to AppSync, stored locally only:', err);
+    }
 
     return event;
 };
 
-export const getEvents = async (): Promise<DiaryEvent[]> => {
-    return [...events];
-};
 
-// Placeholder for future S3/DynamoDB sync
-export const syncToCloud = async () => {
-    console.log('[EventLedger] Syncing to cloud...');
+import { getEvents as fetchFromCloud } from "./getEvents";
+
+// ... existing recordEvent code ...
+
+export const getEvents = async (): Promise<DiaryEvent[]> => {
+    try {
+        const cloudEvents = await fetchFromCloud();
+        if (cloudEvents && cloudEvents.length > 0) {
+            return cloudEvents;
+        }
+    } catch (err) {
+        console.warn('[EventLedger] Failed to fetch from cloud, returning local cache:', err);
+    }
+    return [...events];
 };
 
