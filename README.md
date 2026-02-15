@@ -57,12 +57,3 @@ yarn build
 yarn start
 ```
 
-## 📜 Development Logs
-
-This project was built using an **Agentic Loop**. For details on the development process, design decisions, and verification steps, see the following internal artifacts:
-- [Walkthrough](file:///Users/klonguski/.gemini/antigravity/brain/e5372138-835e-492b-ba70-9e0654ad6044/walkthrough.md)
-- [Design Language](file:///Users/klonguski/.gemini/antigravity/brain/e5372138-835e-492b-ba70-9e0654ad6044/design_language.md)
-- [Implementation Plan](file:///Users/klonguski/.gemini/antigravity/brain/e5372138-835e-492b-ba70-9e0654ad6044/implementation_plan.md)
-
----
-*Created with ❤️ by Antigravity*
