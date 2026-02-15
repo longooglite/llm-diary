@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap');
+
+:root {
+  --void-bg: #0a0f1e;
+  --ledger-gray: rgb(245, 245, 245);
+  --border-subtle: rgba(204, 204, 204, 0.2);
+  --accent-action: #00f2ff;
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(245, 245, 245, 0.7);
+  --font-mono: 'Geist Mono', monospace;
+  --font-sans: 'Geist', sans-serif;
+}
+
+body {
+  background-color: var(--void-bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ledger-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.architectural-grid {
+  border-left: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ledger-header {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.system-stats-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--void-bg);
+  border-top: 1px solid var(--border-subtle);
+  padding: 10px 40px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 20px;
+}

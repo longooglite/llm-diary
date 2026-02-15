@@ -1,0 +1,9 @@
+mutation logDiaryEvent($logDiaryEventInput: LogDiaryEventInput!) {
+  logDiaryEvent(input: $logDiaryEventInput) {
+    eventtimeid
+    user
+    raw_text
+    source
+    created_at
+  }
+}

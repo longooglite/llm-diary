@@ -1,77 +1,78 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import LabeledInput from '../LabeledInput/LabeledInput'
+import { recordEvent } from '@/lib/eventLedger'
 import styles from './DiaryForm.module.scss'
 
 export const DiaryForm = () => {
-  const [submissionDate, setSubmissionDate] = useState(new Date().toISOString().split('T')[0])
   const [submissionText, setSubmissionText] = useState('')
-  const [submissionMeta, setSubmissionMeta] = useState('')
-  const handleTextChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSubmissionText(e.target.value)
-  }, [])
-  const handleDateChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSubmissionDate(e.target.value)
-  }, [])
-  const handleMetaChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setSubmissionMeta(e.target.value)
-  }, [])
-  const prepPayload = useCallback(() => {
-    return {
-      date: submissionDate,
-      text: submissionText,
-      meta: submissionMeta,
-    }
-  }, [submissionDate, submissionText, submissionMeta])
-  const handleSubmit = useCallback(async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const payload = prepPayload()
-    console.log('Submitting diary entry:', payload)
-    // Add submission logic here (e.g., API call)
-  }, [prepPayload])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [feedback, setFeedback] = useState<string | null>(null)
+
+  const handleTextChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setSubmissionText(e.target.value)
+    },
+    [],
+  )
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      if (!submissionText.trim()) return
+
+      setIsSubmitting(true)
+      setFeedback(null)
+
+      try {
+        await recordEvent(submissionText)
+        setSubmissionText('')
+        setFeedback('Fact recorded in ledger.')
+        setTimeout(() => setFeedback(null), 3000)
+      } catch (err) {
+        console.error('Failed to submit entry:', err)
+        setFeedback('Error recording fact.')
+      } finally {
+        setIsSubmitting(false)
+      }
+    },
+    [submissionText],
+  )
+
   return (
+    <div className={styles.formWrapper}>
       <form
         id="diary-input-form"
         onSubmit={handleSubmit}
         className={styles.diaryForm}
       >
-        <LabeledInput
-          id="diary-input-text"
-          inputProps={{
-            onChange: handleTextChange,
-            value: submissionText
-          }}
-        >
-          Entry:
-        </LabeledInput>
-        <LabeledInput
-          id="diary-input-date"
-          inputProps={{
-            type: 'date',
-            onChange: handleDateChange,
-            value: submissionDate
-          }}
-        >
-          Date:
-        </LabeledInput>
-        <LabeledInput
-          id="diary-input-meta"
-          customInputElement={
-            <textarea
-              name="diary-input-meta"
-              id="diary-input-meta"
-              placeholder="Meta instructions"
-              onChange={handleMetaChange}
-              value={submissionMeta}
-            />
-          }
-        >
-          Meta Instructions:
-        </LabeledInput>
-        <button type="submit">Submit</button>
+        <div className={styles.inputContainer}>
+          <textarea
+            className={styles.mainInput}
+            placeholder="Record a choice, expense, or moment..."
+            onChange={handleTextChange}
+            value={submissionText}
+            disabled={isSubmitting}
+            autoFocus
+          />
+        </div>
+        <div className={styles.formActions}>
+          <button
+            type="submit"
+            className={styles.submitBtn}
+            disabled={isSubmitting || !submissionText.trim()}
+          >
+            {isSubmitting ? 'RECORDING...' : 'COMMIT TO LEDGER'}
+          </button>
+          {feedback && <span className={styles.feedback}>{feedback}</span>}
+        </div>
       </form>
+      <div className={styles.helperText}>
+        <p>Examples: "Worked 4h on frontend", "$45 for groceries", "Decided to use SCSS modules"</p>
+      </div>
+    </div>
   )
 }
 
 export default DiaryForm
+
