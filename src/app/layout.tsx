@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import '@/styles/DesignSystem.scss'
 import './globals.css'
-import { DiaryEntriesContextProvider } from './contexts/DiaryEntriesContext/DiaryEntriesContextProvider'
+import DiaryEntriesContextProvider from './contexts/DiaryEntriesContext/DiaryEntriesContextProvider'
 import CognitoContextProvider from './contexts/CognitoContext/CognitoContextProvider'
 
 const geistSans = Geist({
