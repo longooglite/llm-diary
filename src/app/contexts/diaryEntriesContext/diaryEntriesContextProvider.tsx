@@ -1,10 +1,16 @@
 'use client'
 
-import { useCallback, useEffect, useState } from "react";
-import DiaryEntriesContext from "./DiaryEntriesContext";
+import { useCallback, useEffect, useState } from 'react'
+import DiaryEntriesContext from './DiaryEntriesContext'
 
-export const DiartEntriesContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [diaryEntries, setDiaryEntries] = useState<Array<{ date: string; text: string; meta: string }>>([]) 
+export const DiartEntriesContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
+  const [diaryEntries, setDiaryEntries] = useState<
+    Array<{ date: string; text: string; meta: string }>
+  >([])
   const fetchDiaryEntries = useCallback(async () => {
     // get from api
     // replace with fetched data
@@ -15,10 +21,10 @@ export const DiartEntriesContextProvider = ({ children }: { children: React.Reac
     setDiaryEntries(newDiaryEntries)
   }, [fetchDiaryEntries])
   useEffect(() => {
-  const updateEntries = async () => {
-    const newDiaryEntries = await fetchDiaryEntries()
+    const updateEntries = async () => {
+      const newDiaryEntries = await fetchDiaryEntries()
       setDiaryEntries(newDiaryEntries)
-  }
+    }
     updateEntries()
   }, [fetchDiaryEntries])
   return (
