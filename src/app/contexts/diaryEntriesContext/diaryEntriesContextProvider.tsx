@@ -33,3 +33,5 @@ export const DiaryEntriesContextProvider = ({
     </DiaryEntriesContext.Provider>
   )
 }
+
+export default DiaryEntriesContextProvider
