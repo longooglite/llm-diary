@@ -20,16 +20,16 @@ export const metadata: Metadata = {
   description: 'An event-sourced personal diary and insight system.',
 }
 
-export const RootLayout = ({
+const Layout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) => {
   return (
-    <DiaryEntriesContextProvider>
-      <CognitoContextProvider>
-        <html lang="en">
-          <body className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <DiaryEntriesContextProvider>
+          <CognitoContextProvider>
             <div className="ledger-container">
               <header className="ledger-header">
                 <span>Personal Ledger</span>
@@ -44,12 +44,12 @@ export const RootLayout = ({
                 <span>STATUS: IDLE</span>
               </footer>
             </div>
-          </body>
-        </html>
-      </CognitoContextProvider>
-    </DiaryEntriesContextProvider>
+          </CognitoContextProvider>
+        </DiaryEntriesContextProvider>
+      </body>
+    </html>
   )
 }
 
-export default RootLayout
+export default Layout
 
