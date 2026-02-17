@@ -1,14 +1,30 @@
 import { DiaryEvent } from "@/types";
 import { ApolloClient, HttpLink, InMemoryCache, gql } from "@apollo/client";
 
-export const storeEvent = async (event: DiaryEvent) => {
+export const storeEvent = async (event: DiaryEvent, token?: string) => {
+    console.log('[AppSync Request] storeEvent:', {
+        endpoint: process.env.NEXT_PUBLIC_APPSYNC_ENDPOINT,
+        hasToken: !!token,
+        event: {
+            source: event.source,
+            created_at: event.created_at,
+            raw_text_preview: event.raw_text.substring(0, 50) + '...'
+        }
+    });
+
     // 1. Create apollo client
     // 1.a create new link for apollo client from env variable NEXT_PUBLIC_APPSYNC_ENDPOINT
+    const headers: Record<string, string> = {};
+
+    if (token) {
+        headers['Authorization'] = token;
+    } else {
+        headers['x-api-key'] = process.env.APPSYNC_API_KEY || '';
+    }
+
     const link = new HttpLink({
         uri: process.env.NEXT_PUBLIC_APPSYNC_ENDPOINT,
-        headers: {
-            'x-api-key': process.env.APPSYNC_API_KEY || '',
-        }
+        headers
     });
 
     // 1.b create new cache
@@ -35,7 +51,7 @@ export const storeEvent = async (event: DiaryEvent) => {
 
     // 3. Execute mutation
     try {
-        const { data } = await client.mutate<{ logDiaryEvent: any }>({
+        const result = await client.mutate<{ logDiaryEvent: any }>({
             mutation: LOG_DIARY_EVENT,
             variables: {
                 logDiaryEventInput: {
@@ -46,10 +62,17 @@ export const storeEvent = async (event: DiaryEvent) => {
             }
         });
 
+        console.log('[AppSync Response] storeEvent success:', result.data?.logDiaryEvent);
+
         // 4. Return result
-        return data?.logDiaryEvent;
-    } catch (error) {
-        console.log('[storeEvent] Error persisting to AppSync:', error);
+        return result.data?.logDiaryEvent;
+    } catch (error: any) {
+        console.error('[AppSync Error] storeEvent failed:', {
+            message: error.message,
+            networkError: error.networkError,
+            graphQLErrors: error.graphQLErrors,
+            stack: error.stack
+        });
         throw error;
     }
 };

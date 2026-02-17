@@ -2,9 +2,11 @@
 
 import { useState, useCallback } from 'react'
 import { recordEvent } from '@/lib/eventLedger'
+import { useAuth } from 'react-oidc-context'
 import styles from './DiaryForm.module.scss'
 
 export const DiaryForm = () => {
+  const auth = useAuth()
   const [submissionText, setSubmissionText] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [feedback, setFeedback] = useState<string | null>(null)
@@ -25,7 +27,7 @@ export const DiaryForm = () => {
       setFeedback(null)
 
       try {
-        await recordEvent(submissionText)
+        await recordEvent(submissionText, {}, auth.user?.access_token)
         setSubmissionText('')
         setFeedback('Fact recorded in ledger.')
         setTimeout(() => setFeedback(null), 3000)

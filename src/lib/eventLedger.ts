@@ -1,7 +1,7 @@
 import { DiaryEvent } from "@/types";
 import { storeEvent } from "./storeEvent";
 
-export const recordEvent = async (text: string, meta?: any): Promise<DiaryEvent> => {
+export const recordEvent = async (text: string, meta?: any, token?: string): Promise<DiaryEvent> => {
     const event: DiaryEvent = {
         raw_text: text,
         source: 'web-client',
@@ -10,7 +10,7 @@ export const recordEvent = async (text: string, meta?: any): Promise<DiaryEvent>
     };
 
     try {
-        const result = await storeEvent(event);
+        const result = await storeEvent(event, token);
         console.log('[EventLedger] Recorded new fact:', result);
     } catch (err) {
         console.warn('[EventLedger] Failed to persist to AppSync, stored locally only:', err);

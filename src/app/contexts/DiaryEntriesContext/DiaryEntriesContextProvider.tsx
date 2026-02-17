@@ -2,31 +2,39 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import DiaryEntriesContext from './DiaryEntriesContext'
+import { getEvents } from '@/lib/getEvents'
+import { useAuth } from 'react-oidc-context'
+import { DiaryEvent } from '@/types'
 
 export const DiaryEntriesContextProvider = ({
   children,
 }: {
   children: React.ReactNode
 }) => {
-  const [diaryEntries, setDiaryEntries] = useState<
-    Array<{ date: string; text: string; meta: string }>
-  >([])
+  const auth = useAuth()
+  const [diaryEntries, setDiaryEntries] = useState<DiaryEvent[]>([])
+
   const fetchDiaryEntries = useCallback(async () => {
-    // get from api
-    // replace with fetched data
-    return []
-  }, [])
+    if (!auth.user?.access_token) return []
+    const events = await getEvents(auth.user.access_token)
+    return events
+  }, [auth.user?.access_token])
+
   const forceUpdateEntries = useCallback(async () => {
     const newDiaryEntries = await fetchDiaryEntries()
     setDiaryEntries(newDiaryEntries)
   }, [fetchDiaryEntries])
+
   useEffect(() => {
-    const updateEntries = async () => {
-      const newDiaryEntries = await fetchDiaryEntries()
-      setDiaryEntries(newDiaryEntries)
+    if (auth.isAuthenticated) {
+      const updateEntries = async () => {
+        const newDiaryEntries = await fetchDiaryEntries()
+        setDiaryEntries(newDiaryEntries)
+      }
+      updateEntries()
     }
-    updateEntries()
-  }, [fetchDiaryEntries])
+  }, [auth.isAuthenticated, fetchDiaryEntries])
+
   return (
     <DiaryEntriesContext.Provider value={{ diaryEntries, forceUpdateEntries }}>
       {children}
