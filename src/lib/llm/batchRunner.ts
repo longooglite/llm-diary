@@ -1,8 +1,8 @@
-import { getEvents } from '../eventLedger';
 import { extractMetadata } from './extractor';
 import { groupEventsByDay, groupEventsByWeek } from './aggregator';
 import { generateNarrative } from './summarizer';
 import { writeArtifact } from './artifactWriter';
+import { getEvents } from '../getEvents';
 
 export const runFullBatchProcess = async () => {
     console.log('[BatchRunner] Starting full processing loop...');
