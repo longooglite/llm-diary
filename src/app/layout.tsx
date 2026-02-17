@@ -28,8 +28,8 @@ const Layout = ({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <DiaryEntriesContextProvider>
-          <CognitoContextProvider>
+        <CognitoContextProvider>
+          <DiaryEntriesContextProvider>
             <div className="ledger-container">
               <header className="ledger-header">
                 <span>Personal Ledger</span>
@@ -44,8 +44,8 @@ const Layout = ({
                 <span>STATUS: IDLE</span>
               </footer>
             </div>
-          </CognitoContextProvider>
-        </DiaryEntriesContextProvider>
+          </DiaryEntriesContextProvider>
+        </CognitoContextProvider>
       </body>
     </html>
   )
