@@ -27,7 +27,7 @@ export const DiaryForm = () => {
       setFeedback(null)
 
       try {
-        await recordEvent(submissionText, {}, auth.user?.access_token)
+        await recordEvent(submissionText, {}, auth.user?.id_token)
         setSubmissionText('')
         setFeedback('Fact recorded in ledger.')
         setTimeout(() => setFeedback(null), 3000)

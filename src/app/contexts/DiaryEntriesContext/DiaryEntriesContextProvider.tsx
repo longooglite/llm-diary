@@ -15,10 +15,10 @@ export const DiaryEntriesContextProvider = ({
   const [diaryEntries, setDiaryEntries] = useState<DiaryEvent[]>([])
 
   const fetchDiaryEntries = useCallback(async () => {
-    if (!auth.user?.access_token) return []
-    const events = await getEvents(auth.user.access_token)
+    if (!auth.user?.id_token) return []
+    const events = await getEvents(auth.user.id_token)
     return events
-  }, [auth.user?.access_token])
+  }, [auth.user?.id_token])
 
   const forceUpdateEntries = useCallback(async () => {
     const newDiaryEntries = await fetchDiaryEntries()
